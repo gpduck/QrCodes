@@ -25,5 +25,12 @@ Task default -Depends Pack
 Task Pack {
 	ipmo NuGet
 	Assert (Test-Path $NuSpecFile) -FailureMessage "$NuSpecFile does not exist"
-	exec { nuget pack $NuSpecFile -OutputDirectory $TargetDir -BasePath $BasePath -NoPackageAnalysis -NonInteractive }
+	if(!(Test-Path $TargetDir)) {
+		mkdir $TargetDir > $null
+	}
+	$NuSpecXml = [Xml](Get-Content $NuSpecFile
+	$NuSpecVersion = [Version]($NuSpecXml.Package.Metadata.Version)
+	$VersionDate = [int][Datetime]::Now.ToString("yyyyMMdd")
+	$OutputVersion = New-Object System.Version($NuSpecVersion.Major, $NuSpecVersion.Minor, $VersionDate, $BuildNumber)
+	exec { nuget pack $NuSpecFile -OutputDirectory $TargetDir -BasePath $BasePath -NoPackageAnalysis -NonInteractive -Version ($OutputVersion.ToString())}
 }

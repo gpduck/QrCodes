@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>QRCodes</id>
+    <version>1.0</version>
+    <authors>Chris Duck</authors>
+    <description>Powershell Module to create QRCodes (with some support for other formats).</description>
+    <language>en-US</language>
+    <projectUrl>https://github.com/gpduck/QrCodes</projectUrl>
+  </metadata>
+  <files>
+	<file src="**\*.psm1" target="" />
+	<file src="**\*.psd1" target="" />
+	<file src="**\*.ps1" target="" />
+	<file src="**\*.dll" target="" />
+  </files>
+</package>
