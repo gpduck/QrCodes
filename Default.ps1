@@ -28,7 +28,7 @@ Task Pack {
 	if(!(Test-Path $TargetDir)) {
 		mkdir $TargetDir > $null
 	}
-	$NuSpecXml = [Xml](Get-Content $NuSpecFile
+	$NuSpecXml = [Xml](Get-Content $NuSpecFile)
 	$NuSpecVersion = [Version]($NuSpecXml.Package.Metadata.Version)
 	$VersionDate = [int][Datetime]::Now.ToString("yyyyMMdd")
 	$OutputVersion = New-Object System.Version($NuSpecVersion.Major, $NuSpecVersion.Minor, $VersionDate, $BuildNumber)
