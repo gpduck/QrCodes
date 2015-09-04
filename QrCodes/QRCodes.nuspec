@@ -12,6 +12,7 @@
 	<file src="**\*.psm1" target="" />
 	<file src="**\*.psd1" target="" />
 	<file src="**\*.ps1" target="" />
-	<file src="**\*.dll" target="" />
+	<file src="ZXing_LICENSE.txt" target="" />
+	<file src="ZXing.Net\lib\net40\*.*" target="ZXing.Net\lib\net40\" />
   </files>
 </package>
