@@ -34,4 +34,4 @@ deploy_script:
       
       git tag $env:APPVEYOR_BUILD_VERSION
     }
-- cmd: git push origin $env:APPVEYOR_BUILD_VERSION 
+  - cmd: git push origin %APPVEYOR_BUILD_VERSION% 
