@@ -22,7 +22,6 @@ build_script:
 deploy_script:
 - ps: |
       if($env:APPVEYOR_REPO_BRANCH -eq "master") {
-        ipmo psake
         ipmo powershellget
         
         psake -TaskList SetVersion
@@ -34,4 +33,4 @@ deploy_script:
         
         git tag $env:APPVEYOR_BUILD_VERSION
         git push origin -q $env:APPVEYOR_BUILD_VERSION
-      } 
+      }
