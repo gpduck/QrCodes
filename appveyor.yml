@@ -20,7 +20,7 @@ install:
 build_script:
 - ps: psake Restore
 deploy_script:
-- ps: >-
+- ps: |
   if($env:APPVEYOR_REPO_BRANCH -eq \"master\") {
     ipmo psake
     ipmo powershellget
