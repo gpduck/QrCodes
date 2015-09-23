@@ -18,6 +18,9 @@ Properties {
 	if(!$BasePath) {
 		$BasePath = Join-Path -Path $ProjectDir -ChildPath $ProjectName
 	}
+	if(!$ModuleVersion) {
+		$ModuleVersion = $env:APPVEYOR_BUILD_VERSION
+	}
 }
 
 Task default -Depends Clean,Pack
@@ -51,4 +54,13 @@ Task PackageRestore {
 Task Clean {
 	rm $BasePath\ZXing.Net -recurse -erroraction SilentlyContinue
 	rm bin -recurse -erroraction SilentlyContinue
+}
+
+Task SetVersion {
+	if($ModuleVersion) {
+		$PSD1Path = Join-Path $BasePath QrCodes.psd1
+		$PSD1 = Get-Content $PSD1Path -raw
+		$PSD1 = $PSD1 -replace "ModuleVersion = '(.+)'","ModuleVersion = '$ModuleVersion'"
+		Set-Content $PSD1Path -Value $PSD1
+	}
 }

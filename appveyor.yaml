@@ -1,0 +1,37 @@
+version: 1.0.0.{build}
+skip_tags: true
+os: Unstable
+init:
+- ps: 
+environment:
+  PowershellGalleryKey:
+    secure: v/rfpnUEoQZscZmcQFHEdlrBanHQVYs3WyEKGkhTrKAQeJ4ejrhd0IC3m7PlAAoN
+  GitHubKey:
+    secure: G+1OQqeWIER+COpwfBzVyUIuYA+6PsNlt9HdWOQ0z4s2m7Kf2h6JDX1tUCuFWkFi
+install:
+- ps: >-
+    cinst psake -y
+
+    import-module powershellget
+
+    Get-PackageProvider -Name NuGet -ForceBootstrap
+
+    install-module pester -force
+build_script:
+- ps: psake Restore
+deploy_script:
+- ps: >-
+	if($env:APPVEYOR_REPO_BRANCH -eq \"master\") {
+    ipmo psake
+	  ipmo powershellget
+    
+    psake -TaskList SetVersion
+
+	  publish-module -Path .\\QrCodes -NuGetApiKey $env:PowerShellGalleryKey -Tag QRCode,ZXing -ProjectUri https://github.com/gpduck/QrCodes
+	  
+	  git config --global credential.helper store
+	  Add-Content \"$env:USERPROFILE\\.git-credentials\" \"https://${env:GitHubKey}:x-oauth-basic@github.com`n\"
+	  
+	  git tag $env:APPVEYOR_BUILD_VERSION
+	}
+- cmd: git push origin $env:APPVEYOR_BUILD_VERSION 
