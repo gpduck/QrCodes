@@ -33,5 +33,5 @@ deploy_script:
           Add-Content "$env:USERPROFILE\.git-credentials" "https://${env:GitHubKey}:x-oauth-basic@github.com`n"
           
           git tag $env:APPVEYOR_BUILD_VERSION
-        }
-  - cmd: git push origin %APPVEYOR_BUILD_VERSION% 
+          git push origin -q $env:APPVEYOR_BUILD_VERSION
+        } 
