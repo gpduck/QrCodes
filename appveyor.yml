@@ -21,16 +21,16 @@ build_script:
 - ps: psake Restore
 deploy_script:
   - ps: |
-    if($env:APPVEYOR_REPO_BRANCH -eq \"master\") {
+    if($env:APPVEYOR_REPO_BRANCH -eq "master") {
       ipmo psake
       ipmo powershellget
       
       psake -TaskList SetVersion
       
-      publish-module -Path .\\QrCodes -NuGetApiKey $env:PowerShellGalleryKey -Tag QRCode,ZXing -ProjectUri https://github.com/gpduck/QrCodes
+      publish-module -Path .\QrCodes -NuGetApiKey $env:PowerShellGalleryKey -Tag QRCode,ZXing -ProjectUri https://github.com/gpduck/QrCodes
       
       git config --global credential.helper store
-      Add-Content \"$env:USERPROFILE\\.git-credentials\" \"https://${env:GitHubKey}:x-oauth-basic@github.com`n\"
+      Add-Content "$env:USERPROFILE\.git-credentials" "https://${env:GitHubKey}:x-oauth-basic@github.com`n"
       
       git tag $env:APPVEYOR_BUILD_VERSION
     }
