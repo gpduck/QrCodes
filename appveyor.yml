@@ -1,6 +1,6 @@
 version: 1.0.0.{build}
 skip_tags: true
-os: Unstable
+os: "WMF 5"
 init:
 - ps: 
 environment:
