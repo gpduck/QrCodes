@@ -1,6 +1,7 @@
 version: 1.0.0.{build}
 skip_tags: true
-os: "WMF 5"
+image:
+  - Visual Studio 2017
 init:
 - ps: 
 environment:
@@ -10,13 +11,12 @@ environment:
     secure: G+1OQqeWIER+COpwfBzVyUIuYA+6PsNlt9HdWOQ0z4s2m7Kf2h6JDX1tUCuFWkFi
 install:
 - ps: >-
-    cinst psake -y
-
     import-module powershellget
 
     Get-PackageProvider -Name NuGet -ForceBootstrap
 
     install-module pester -force
+    install-module psake -force
 build_script:
 - ps: psake Restore
 deploy_script:
