@@ -13,6 +13,6 @@
 	<file src="**\*.psd1" target="" />
 	<file src="**\*.ps1" target="" />
 	<file src="ZXing_LICENSE.txt" target="" />
-	<file src="ZXing.Net\lib\net40\*.*" target="ZXing.Net\lib\net40\" />
+	<file src="ZXing.Net\lib\netstandard1.0\*.*" target="ZXing.Net\lib\netstandard1.0\" />
   </files>
 </package>
