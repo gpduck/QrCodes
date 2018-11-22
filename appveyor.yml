@@ -10,7 +10,7 @@ environment:
   GitHubKey:
     secure: G+1OQqeWIER+COpwfBzVyUIuYA+6PsNlt9HdWOQ0z4s2m7Kf2h6JDX1tUCuFWkFi
 install:
-- ps: >-
+- ps: |
     import-module powershellget
 
     Get-PackageProvider -Name NuGet -ForceBootstrap
