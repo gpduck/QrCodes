@@ -18,14 +18,12 @@ install:
     install-module pester -force -AllowClobber -SkipPublisherCheck
     install-module psake -force -AllowClobber -SkipPublisherCheck
 build_script:
-- ps: invoke-psake Restore
+- ps: invoke-psake -TaskList Restore,SetVersion
 deploy_script:
 - ps: |
       if($env:APPVEYOR_REPO_BRANCH -eq "master") {
         ipmo psake
         ipmo powershellget
-        
-        psake -TaskList SetVersion
         
         publish-module -Path .\QrCodes -NuGetApiKey $env:PowerShellGalleryKey -Tag QRCode,ZXing -ProjectUri https://github.com/gpduck/QrCodes
         
