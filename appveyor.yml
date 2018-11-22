@@ -22,22 +22,18 @@ install:
     install-module psake -force -AllowClobber -SkipPublisherCheck
 build_script:
 - ps: invoke-psake -TaskList Restore,SetVersion
-deploy:
-- provider: GitHub
-  tag: $(APPVEYOR_BUILD_VERSION)
-  auth_token:
-    secure: ohZ2zHl5L9fU64SRmm/07fRj7apmt1X9mkChaLHLnTzwyIs6Szhr7a9+bUXWNXgm
-  draft: true
-deploy_script:
+before_deploy:
 - ps: |
       if($env:APPVEYOR_REPO_BRANCH -eq "master") {
         ipmo powershellget
         
         publish-module -Path .\QrCodes -NuGetApiKey "$env:PowerShellGalleryKey" -Tag QRCode,ZXing
-        
-        git config --global credential.helper store
-        Add-Content "$env:USERPROFILE\.git-credentials" "https://${env:GitHubKey}:x-oauth-basic@github.com`n"
-        
-        git tag $env:APPVEYOR_BUILD_VERSION
-        git push origin -q $env:APPVEYOR_BUILD_VERSION
-      } 
+      }
+deploy:
+- provider: GitHub
+  tag: $(APPVEYOR_BUILD_VERSION)
+  auth_token:
+    secure: eYjRH/vLjuc425MocEniahdNMctg+z44QhT1l4rn8GOcpcixPW/wIwskO5xrFg2T
+  draft: true
+  on:
+    APPVEYOR_REPO_BRANCH: master
