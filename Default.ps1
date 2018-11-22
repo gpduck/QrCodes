@@ -51,6 +51,8 @@ Task PackageRestore -Depends GetNuget {
 	exec {
 		nuget install -ExcludeVersion -OutputDirectory $BasePath packages.config
 	}
+	Get-ChildItem $BasePath\ZXing.Net\lib\ -Exclude netstandard1.0 | Remove-Item -Force -Recurse
+	Remove-Item -Path $BasePath\ZXing.Net\ZXing.Net.nupkg
 }
 
 Task Clean {
