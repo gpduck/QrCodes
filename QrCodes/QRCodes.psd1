@@ -33,7 +33,7 @@ Copyright = 'Chris Duck 2012'
 Description = 'PowerShell module that uses the Google ZXing.Net library to generate QRCodes.'
 
 # Minimum version of the PowerShell engine required by this module
-# PowerShellVersion = ''
+PowerShellVersion = '5.1'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''
