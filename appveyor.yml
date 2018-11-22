@@ -9,8 +9,6 @@ environment:
     secure: eYjRH/vLjuc425MocEniahdNMctg+z44QhT1l4rn8GOcpcixPW/wIwskO5xrFg2T
   GitHubKey:
     secure: T4FEQ69B/omx+5e6RuhQaG58Q7QzQRJJ9tweJRhLaaGfi0oiRlRUUYwT6JJUeavK
-  TestValue:
-    secure: jvmrBxaibJqopssfgMgyQg==
 install:
 - ps: |
     import-module powershellget
@@ -24,14 +22,16 @@ install:
     install-module psake -force -AllowClobber -SkipPublisherCheck
 build_script:
 - ps: invoke-psake -TaskList Restore,SetVersion
+deploy:
+- provider: GitHub
+  tag: $(APPVEYOR_BUILD_VERSION)
+  auth_token:
+    secure: ohZ2zHl5L9fU64SRmm/07fRj7apmt1X9mkChaLHLnTzwyIs6Szhr7a9+bUXWNXgm
+  draft: true
 deploy_script:
 - ps: |
       if($env:APPVEYOR_REPO_BRANCH -eq "master") {
         ipmo powershellget
-
-        Get-Module PowerShellGet
-
-        Write-Host "$env:TestValue"
         
         publish-module -Path .\QrCodes -NuGetApiKey "$env:PowerShellGalleryKey" -Tag QRCode,ZXing
         
