@@ -25,10 +25,11 @@ build_script:
 deploy_script:
 - ps: |
       if($env:APPVEYOR_REPO_BRANCH -eq "master") {
-        ipmo psake
         ipmo powershellget
+
+        Get-Module PowerShellGet
         
-        publish-module -Path .\QrCodes -NuGetApiKey '$env:PowerShellGalleryKey' -Tag QRCode,ZXing -ProjectUri https://github.com/gpduck/QrCodes
+        publish-module -Path .\QrCodes -NuGetApiKey '$env:PowerShellGalleryKey' -Tag QRCode,ZXing
         
         git config --global credential.helper store
         Add-Content "$env:USERPROFILE\.git-credentials" "https://${env:GitHubKey}:x-oauth-basic@github.com`n"
