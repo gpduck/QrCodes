@@ -33,7 +33,7 @@ deploy:
 - provider: GitHub
   tag: $(APPVEYOR_BUILD_VERSION)
   auth_token:
-    secure: eYjRH/vLjuc425MocEniahdNMctg+z44QhT1l4rn8GOcpcixPW/wIwskO5xrFg2T
+    secure: au7U3lCQxP2uBfxLTMBjQP4Wbaj6m6bIePUDpEfGIzfHELRVoXjt0y+gLC6KsSNI
   draft: true
   on:
     APPVEYOR_REPO_BRANCH: master
