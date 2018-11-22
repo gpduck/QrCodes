@@ -47,7 +47,7 @@ Task GetNuget {
 	}
 }
 
-Task PackageRestore {
+Task PackageRestore -Depends GetNuget {
 	exec {
 		nuget install -ExcludeVersion -OutputDirectory $BasePath packages.config
 	}
