@@ -40,7 +40,7 @@ Task Pack -Depends GetNuget,PackageRestore {
 
 Task GetNuget {
 	if(!(Test-Path $ProjectDir\nuget.exe)) {
-		invoke-webrequest -uri https://nuget.org/nuget.exe -outfile $ProjectDir\nuget.exe
+		invoke-webrequest -uri https://dist.nuget.org/win-x86-commandline/v4.8.1/nuget.exe -outfile $ProjectDir\nuget.exe
 	}
 	function script:nuget {
 		&$ProjectDir\nuget.exe $Args
@@ -48,7 +48,9 @@ Task GetNuget {
 }
 
 Task PackageRestore {
-	nuget install -ExcludeVersion -OutputDirectory $BasePath packages.config
+	exec {
+		nuget install -ExcludeVersion -OutputDirectory $BasePath packages.config
+	}
 }
 
 Task Clean {
