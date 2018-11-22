@@ -1,4 +1,4 @@
-version: 1.0.0.{build}
+version: 1.1.0.{build}
 skip_tags: true
 image:
   - Visual Studio 2017
@@ -9,6 +9,8 @@ environment:
     secure: eYjRH/vLjuc425MocEniahdNMctg+z44QhT1l4rn8GOcpcixPW/wIwskO5xrFg2T
   GitHubKey:
     secure: T4FEQ69B/omx+5e6RuhQaG58Q7QzQRJJ9tweJRhLaaGfi0oiRlRUUYwT6JJUeavK
+  TestValue:
+    secure: jvmrBxaibJqopssfgMgyQg==
 install:
 - ps: |
     import-module powershellget
@@ -28,8 +30,10 @@ deploy_script:
         ipmo powershellget
 
         Get-Module PowerShellGet
+
+        Write-Host "$env:TestValue"
         
-        publish-module -Path .\QrCodes -NuGetApiKey '$env:PowerShellGalleryKey' -Tag QRCode,ZXing
+        publish-module -Path .\QrCodes -NuGetApiKey "$env:PowerShellGalleryKey" -Tag QRCode,ZXing
         
         git config --global credential.helper store
         Add-Content "$env:USERPROFILE\.git-credentials" "https://${env:GitHubKey}:x-oauth-basic@github.com`n"
