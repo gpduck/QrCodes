@@ -50,14 +50,15 @@ function Format-QRCode {
 		$TopActiveChar = [string][char]0x2584
 		$BottomActiveChar = [string][char]0x2580
 	}
+
+	$SB = New-Object Text.StringBuilder
 	
 	1..$TopPadding | %{
 		#Write-Host ($BlankChar * ($QRCode.Matrix.Width + $SidePadding + $SidePadding) * $CharacterWidth) -fore black -back white
-		$BlankChar * ($QRCode.Matrix.Width + $SidePadding + $SidePadding) * $CharacterWidth
+		$SB.AppendLine($BlankChar * ($QRCode.Matrix.Width + $SidePadding + $SidePadding) * $CharacterWidth) > $null
 	}
 	for($r = 0; $r -lt $QRCode.Matrix.Height; $r++) {
-		$RowSB = new-object Text.StringBuilder
-		$RowSB.Append($BlankChar * $SidePadding * $CharacterWidth) | Out-Null
+		$SB.Append($BlankChar * $SidePadding * $CharacterWidth) > $null
 		for($c = 0; $c -lt $QRCode.Matrix.Width; $c++) {
 			$ThisRowEntry = $QRCode.Matrix.Array[$c][$r]
 			if($r -lt $QRCode.Matrix.Height - 1) {
@@ -77,16 +78,15 @@ function Format-QRCode {
 				$Out = $BlankChar
 			}
 			
-			$RowSB.Append($Out) | Out-Null
+			$SB.Append($Out) > $null
 		}
 		$r++
-		$RowSB.Append($BlankChar * $SidePadding * $CharacterWidth) | Out-Null
-		#Write-Host $RowSB.ToString() -fore Black -back White
-		$RowSB.ToString()
+		$SB.AppendLine($BlankChar * $SidePadding * $CharacterWidth) > $null
 	}
 	1..$TopPadding | %{
 		#Write-Host ($BlankChar * ($QRCode.Matrix.Width + $SidePadding + $SidePadding) * $CharacterWidth) -fore black -back white
-		$BlankChar * ($QRCode.Matrix.Width + $SidePadding + $SidePadding) * $CharacterWidth
+		$SB.AppendLine($BlankChar * ($QRCode.Matrix.Width + $SidePadding + $SidePadding) * $CharacterWidth) > $null
 	}
+	$SB.ToString()
 }
 Export-ModuleMember -Function Format-QRCode
