@@ -28,7 +28,7 @@ deploy_script:
         ipmo psake
         ipmo powershellget
         
-        publish-module -Path .\QrCodes -NuGetApiKey '$env:PowerShellGalleryKey' -Tag QRCode,ZXing -ProjectUri https://github.com/gpduck/QrCodes
+        publish-module -Name QrCodes -Path .\QrCodes -NuGetApiKey '$env:PowerShellGalleryKey' -Tag QRCode,ZXing -ProjectUri https://github.com/gpduck/QrCodes
         
         git config --global credential.helper store
         Add-Content "$env:USERPROFILE\.git-credentials" "https://${env:GitHubKey}:x-oauth-basic@github.com`n"
