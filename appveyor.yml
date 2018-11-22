@@ -8,7 +8,7 @@ environment:
   PowershellGalleryKey:
     secure: 8oejCagCM0DPK8PK+0vZ+SCsgsYSW55dT3lFKgY5i+vFP9CSCsNEnaJzVmzmgpQn
   GitHubKey:
-    secure: G+1OQqeWIER+COpwfBzVyUIuYA+6PsNlt9HdWOQ0z4s2m7Kf2h6JDX1tUCuFWkFi
+    secure: T4FEQ69B/omx+5e6RuhQaG58Q7QzQRJJ9tweJRhLaaGfi0oiRlRUUYwT6JJUeavK
 install:
 - ps: |
     import-module powershellget
