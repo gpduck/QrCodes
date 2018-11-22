@@ -6,7 +6,7 @@ init:
 - ps: 
 environment:
   PowershellGalleryKey:
-    secure: 8oejCagCM0DPK8PK+0vZ+SCsgsYSW55dT3lFKgY5i+vFP9CSCsNEnaJzVmzmgpQn
+    secure: Klw85ScA90qbL+f6QPgqTJ1yEM84GdsjSr132EGKsLPUJkBZXzE8/9lsOHcMDPOS
   GitHubKey:
     secure: T4FEQ69B/omx+5e6RuhQaG58Q7QzQRJJ9tweJRhLaaGfi0oiRlRUUYwT6JJUeavK
 install:
