@@ -28,6 +28,11 @@
 
 .PARAMETER Passthrough
     Indicates that the output path should be passed along in the pipeline.
+
+.EXAMPLE
+    Out-BarcodeImage -Content "test string" -Path $pwd\barcode.png
+
+    Creates a QR code and saves it as a PNG file into the local directory.
 #>
 function Out-BarcodeImage {
     param(
@@ -48,7 +53,7 @@ function Out-BarcodeImage {
 
         [switch]$Passthrough
     )
-    $Writer = New-Object ZXing.BarcodeWriter -Property @{ Format = $BarcodeFormat; Options = $Options }
+    $Writer = New-Object ZXing.BarcodeWriterPixelData -Property @{ Format = $BarcodeFormat; Options = $Options }
     if($Width) {
         $Writer.Options.Width = $Width
     }
@@ -56,7 +61,27 @@ function Out-BarcodeImage {
         $Writer.Options.Height = $Height
     }
     try {
-        $Bitmap = $Writer.Write($Content)
+        $PixelData = $Writer.Write($Content)
+
+        $Height = $PixelData.Height
+        $Width = $PixelData.Width
+        $PixelCount = $Height * $Width
+
+        $Bitmap = New-Object System.Drawing.Bitmap($Width, $Height)
+
+        for($i = 0; $i -lt $PixelCount; $i++) {
+            $A = $PixelData.Pixels[$i * 4 + 3] -bxor 0xff
+            $R = $PixelData.Pixels[$i * 4 + 2]
+            $G = $PixelData.Pixels[$i * 4 + 1]
+            $B = $PixelData.Pixels[$i * 4]
+
+            $X = $i % $Width
+            $Y = [Math]::Floor( ($i / $Height) )
+            try {
+            $Bitmap.SetPixel($X, $Y, [System.Drawing.Color]::FromARGB($A, $R, $G, $B))
+            } catch { write-host "$x $y" }
+        }
+
         $Bitmap.Save($Path, $ImageFormat)
         if($Passthrough) {
             $Path
