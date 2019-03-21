@@ -36,7 +36,7 @@
 #>
 function Out-BarcodeImage {
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true)]
         $Content,
 
         [ZXing.BarcodeFormat]$BarcodeFormat = [ZXing.BarcodeFormat]::QR_Code,
@@ -53,44 +53,59 @@ function Out-BarcodeImage {
 
         [switch]$Passthrough
     )
-    $Writer = New-Object ZXing.BarcodeWriterPixelData -Property @{ Format = $BarcodeFormat; Options = $Options }
-    if($Width) {
-        $Writer.Options.Width = $Width
-    }
-    if($Height) {
-        $Writer.Options.Height = $Height
-    }
-    try {
-        $PixelData = $Writer.Write($Content)
-
-        $Height = $PixelData.Height
-        $Width = $PixelData.Width
-        $PixelCount = $Height * $Width
-
-        $Bitmap = New-Object System.Drawing.Bitmap($Width, $Height)
-
-        for($i = 0; $i -lt $PixelCount; $i++) {
-            $A = $PixelData.Pixels[$i * 4 + 3] -bxor 0xff
-            $R = $PixelData.Pixels[$i * 4 + 2]
-            $G = $PixelData.Pixels[$i * 4 + 1]
-            $B = $PixelData.Pixels[$i * 4]
-
-            $X = $i % $Width
-            $Y = [Math]::Floor( ($i / $Height) )
-            try {
-            $Bitmap.SetPixel($X, $Y, [System.Drawing.Color]::FromARGB($A, $R, $G, $B))
-            } catch { write-host "$x $y" }
+    begin {
+        $Folder = Split-Path -Path $Path -Parent
+        $File = Split-Path -Path $Path -Leaf
+        $Folder = (Resolve-Path -Path $Folder -ErrorAction Stop).Path
+        $Path = Join-Path -Path $Folder -ChildPath $File
+        $ContentBuilder = New-Object System.Text.StringBuilder
+        $Writer = New-Object ZXing.BarcodeWriterPixelData -Property @{ Format = $BarcodeFormat; Options = $Options }
+        if($Width -gt $Height) {
+            $Size = $Width
+        } else {
+            $Size = $Height
         }
-
-        $Bitmap.Save($Path, $ImageFormat)
-        if($Passthrough) {
-            $Path
+        if($Size) {
+            $Writer.Options.Width = $Size
+            $Writer.Options.Height = $Size
         }
-    } catch {
-        Write-Error -Message "Error creating barcode: $($_.Exception.Message)" -Exception $_.Exception
-    } finally {
-        if($Bitmap) {
-            $Bitmap.Dispose()
+    }
+    process {
+        $ContentBuilder.AppendLine($Content) > $null
+    }
+    end {
+        try {
+            $PixelData = $Writer.Write($ContentBuilder.ToString())
+
+            $Height = $PixelData.Height
+            $Width = $PixelData.Width
+            $PixelCount = $Height * $Width
+
+            $Bitmap = New-Object System.Drawing.Bitmap($Width, $Height)
+
+            for($i = 0; $i -lt $PixelCount; $i++) {
+                $A = $PixelData.Pixels[$i * 4 + 3] -bxor 0xff
+                $R = $PixelData.Pixels[$i * 4 + 2]
+                $G = $PixelData.Pixels[$i * 4 + 1]
+                $B = $PixelData.Pixels[$i * 4]
+
+                $X = $i % $Width
+                $Y = [Math]::Floor( ($i / $Height) )
+                try {
+                $Bitmap.SetPixel($X, $Y, [System.Drawing.Color]::FromARGB($A, $R, $G, $B))
+                } catch { write-host "$x $y" }
+            }
+
+            $Bitmap.Save($Path, $ImageFormat)
+            if($Passthrough) {
+                $Path
+            }
+        } catch {
+            Write-Error -Message "Error creating barcode: $($_.Exception.Message)" -Exception $_.Exception
+        } finally {
+            if($Bitmap) {
+                $Bitmap.Dispose()
+            }
         }
     }
 }
