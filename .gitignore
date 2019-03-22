@@ -1,6 +1,16 @@
 QrCodes/ZXing.net
 nuget.exe
 
+# Paket and module binary files
+paket-files/
+.paket/paket.exe
+src/bin/
+Release/
+*.zip
+PesterResults.xml
+
+# Module binary files
+src/bin/
 
 #################
 ## Eclipse
@@ -134,7 +144,7 @@ publish/
 
 # NuGet Packages Directory
 ## TODO: If you have NuGet Package Restore enabled, uncomment the next line
-#packages/
+packages/
 
 # Windows Azure Build Output
 csx

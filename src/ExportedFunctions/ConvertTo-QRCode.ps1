@@ -17,16 +17,16 @@
     This converts the URL to a QRCode an then uses the Format-QRCode function to output the code on the screen.
 #>
 function ConvertTo-QRCode {
-	param(
-		[Parameter(ValueFromPipeline=$true,Mandatory=$true)]
-		$InputObject,
-		
+    param(
+        [Parameter(ValueFromPipeline=$true,Mandatory=$true)]
+        $InputObject,
+
         [ValidateSet("H","L","M","Q")]
-		[Parameter(Mandatory=$false)]
-		$ErrorCorrection = "M"
-	)
-	process {
-		[ZXing.QrCode.Internal.Encoder]::Encode($InputObject, [ZXing.QrCode.Internal.ErrorCorrectionLevel]::$ErrorCorrection)
-	}
+        [Parameter(Mandatory=$false)]
+        $ErrorCorrection = "M"
+    )
+    process {
+        [ZXing.QrCode.Internal.Encoder]::Encode($InputObject, [ZXing.QrCode.Internal.ErrorCorrectionLevel]::$ErrorCorrection)
+    }
 }
 Export-ModuleMember -Function ConvertTo-QrCode

@@ -99,7 +99,7 @@ function Out-BarcodeImage {
                 $Y = [Math]::Floor( ($i / $Height) )
                 try {
                 $Bitmap.SetPixel($X, $Y, [System.Drawing.Color]::FromARGB($A, $R, $G, $B))
-                } catch { write-host "$x $y" }
+                } catch { Write-Debug -Message "$x $y" }
             }
 
             $Bitmap.Save($Path, $ImageFormat)

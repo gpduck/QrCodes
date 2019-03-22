@@ -1,10 +1,18 @@
-version: 1.1.0.{build}
+version: 1.2.0.{build}
 skip_tags: true
 image:
   - Visual Studio 2017
 init:
-- ps: 
+- ps: |
+    "APPVEYOR_REPO_BRANCH = $env:APPVEYOR_REPO_BRANCH"
+    "APPVEYOR_PULL_REQUEST_NUMBER = $env:APPVEYOR_PULL_REQUEST_NUMBER"
+    "APPVEYOR_REPO_COMMIT_MESSAGE = $env:APPVEYOR_REPO_COMMIT_MESSAGE"
+    "OS = $env:OS"
+- sh: export PATH=/home/appveyor/.local/bin:$PATH
 environment:
+  POWERSHELL_TELEMETRY_OPTOUT: 1
+  # Avoid expensive initialization of dotnet cli, see: http://donovanbrown.com/post/Stop-wasting-time-during-NET-Core-builds
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   PowershellGalleryKey:
     secure: eYjRH/vLjuc425MocEniahdNMctg+z44QhT1l4rn8GOcpcixPW/wIwskO5xrFg2T
   GitHubKey:
@@ -12,23 +20,25 @@ environment:
 install:
 - ps: |
     import-module powershellget
-    Install-module PowerShellGet -force -AllowClobber -SkipPublisherCheck
+    Install-module PowerShellGet -force -AllowClobber -SkipPublisherCheck -Scope CurrentUser
     Remove-Module PowerShellGet -Force
     Import-Module PowerShellGet -Force
 
     Get-PackageProvider -Name NuGet -ForceBootstrap
 
-    install-module pester -force -AllowClobber -SkipPublisherCheck
-    install-module psake -force -AllowClobber -SkipPublisherCheck
+    install-module pester -force -AllowClobber -SkipPublisherCheck -Scope CurrentUser
+    install-module PSScriptAnalyzer -force -AllowClobber -SkipPublisherCheck -Scope CurrentUser
 build_script:
-- ps: invoke-psake -TaskList Restore,SetVersion
-before_deploy:
 - ps: |
-      if($env:APPVEYOR_REPO_BRANCH -eq "master") {
-        ipmo powershellget
-        
-        publish-module -Path .\QrCodes -NuGetApiKey "$env:PowerShellGalleryKey" -Tag QRCode,ZXing
+      if( $env:APPVEYOR_REPO_BRANCH -eq "master" -and !$env:APPVEYOR_PULL_REQUEST_NUMBER -and $env:APPVEYOR_REPO_COMMIT_MESSAGE -notlike "skip: *" ) {
+        .\Invoke-Build.ps1 build,test,publish
+      } else {
+        .\Invoke-Build.ps1 build,test
       }
+
+artifacts:
+  - path: QrCodes.zip
+
 deploy:
 - provider: GitHub
   tag: $(APPVEYOR_BUILD_VERSION)

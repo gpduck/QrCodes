@@ -1,5 +1,5 @@
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
-$sut = Join-Path $here "../QrCodes"
+$sut = Join-Path $here "../Release/QrCodes"
 
 Import-module $sut -Force
 

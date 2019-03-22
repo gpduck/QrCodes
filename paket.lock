@@ -1,0 +1,8 @@
+RESTRICTION: || (== net45) (== netstandard2.0)
+NUGET
+  remote: https://www.nuget.org/api/v2
+    Microsoft.NETCore.Platforms (2.2) - restriction: || (&& (== net45) (< net20) (< portable-net40+win8+wp7+wp71+wp8+sl4+sl5)) (&& (== net45) (>= netcoreapp2.0)) (&& (== net45) (< netstandard1.0) (< portable-net40+win8+wp7+wp71+wp8+sl4+sl5) (>= win8)) (&& (== net45) (< portable-net40+win8+wp7+wp71+wp8+sl4+sl5) (>= uap10.0)) (&& (== net45) (< portable-net40+win8+wp7+wp71+wp8+sl4+sl5) (>= uap10.1)) (&& (== net45) (< portable-net40+win8+wp7+wp71+wp8+sl4+sl5) (>= wp8)) (&& (== net45) (< portable-net40+win8+wp7+wp71+wp8+sl4+sl5) (>= wpa81)) (== netstandard2.0)
+    NETStandard.Library (2.0.3) - restriction: || (&& (== net45) (< net20) (< portable-net40+win8+wp7+wp71+wp8+sl4+sl5)) (== netstandard2.0)
+      Microsoft.NETCore.Platforms (>= 1.1)
+    ZXing.Net (0.16.2)
+      NETStandard.Library (>= 1.6.1) - restriction: || (&& (== net45) (< net20) (< portable-net40+win8+wp7+wp71+wp8+sl4+sl5)) (== netstandard2.0)
