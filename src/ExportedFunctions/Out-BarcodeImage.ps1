@@ -58,7 +58,6 @@ function Out-BarcodeImage {
         $File = Split-Path -Path $Path -Leaf
         $Folder = (Resolve-Path -Path $Folder -ErrorAction Stop).Path
         $Path = Join-Path -Path $Folder -ChildPath $File
-        $ContentBuilder = New-Object System.Text.StringBuilder
         $Writer = New-Object ZXing.BarcodeWriterPixelData -Property @{ Format = $BarcodeFormat; Options = $Options }
         if($Width -gt $Height) {
             $Size = $Width
@@ -69,13 +68,20 @@ function Out-BarcodeImage {
             $Writer.Options.Width = $Size
             $Writer.Options.Height = $Size
         }
+        $ContentList = New-Object "System.Collections.Generic.List[string]"
     }
     process {
-        $ContentBuilder.AppendLine($Content) > $null
+        $ContentList.Add($Content.ToString())
     }
     end {
         try {
-            $PixelData = $Writer.Write($ContentBuilder.ToString())
+            if($ContentList.Count -gt 1) {
+                $ContentBuilder = New-Object System.Text.StringBuilder
+                $Content = $ContentBuilder.AppendJoin( ([System.Environment]::NewLine), $ContentList)
+            } else {
+                $Content = $ContentList[0]
+            }
+            $PixelData = $Writer.Write($Content)
 
             $Height = $PixelData.Height
             $Width = $PixelData.Width
@@ -93,7 +99,7 @@ function Out-BarcodeImage {
                 $Y = [Math]::Floor( ($i / $Height) )
                 try {
                 $Bitmap.SetPixel($X, $Y, [System.Drawing.Color]::FromARGB($A, $R, $G, $B))
-                } catch { write-host "$x $y" }
+                } catch { Write-Debug -Message "$x $y" }
             }
 
             $Bitmap.Save($Path, $ImageFormat)

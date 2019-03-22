@@ -1,0 +1,5 @@
+source https://www.nuget.org/api/v2
+
+framework: net45,netstandard20
+
+nuget ZXing.Net = 0.16.2
